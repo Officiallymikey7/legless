@@ -22,6 +22,7 @@ export class InputManager {
     down: false,
     left: false,
     right: false,
+    jump: false,
   };
 
   private _mouse: MouseState = {
@@ -80,6 +81,8 @@ export class InputManager {
       case 'D':
       case 'ArrowRight':
         return 'right';
+      case ' ':
+        return 'jump';
       default:
         return null;
     }
@@ -88,6 +91,7 @@ export class InputManager {
   private _handleKeyDown(e: KeyboardEvent): void {
     const flag = this._resolveMovementKey(e.key);
     if (flag !== null) {
+      e.preventDefault();
       this._keyboard[flag] = true;
     }
   }
@@ -95,6 +99,7 @@ export class InputManager {
   private _handleKeyUp(e: KeyboardEvent): void {
     const flag = this._resolveMovementKey(e.key);
     if (flag !== null) {
+      e.preventDefault();
       this._keyboard[flag] = false;
     }
   }
