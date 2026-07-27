@@ -1,0 +1,16 @@
+{
+  "name": "legless",
+  "version": "0.1.0",
+  "description": "A 2D tile-based browser sandbox game inspired by Terraria",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.3",
+    "vite": "^6.4.3"
+  }
+}
