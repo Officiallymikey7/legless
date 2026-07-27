@@ -91,6 +91,7 @@ export class InputManager {
   private _handleKeyDown(e: KeyboardEvent): void {
     const flag = this._resolveMovementKey(e.key);
     if (flag !== null) {
+      e.preventDefault();
       this._keyboard[flag] = true;
     }
   }
@@ -98,6 +99,7 @@ export class InputManager {
   private _handleKeyUp(e: KeyboardEvent): void {
     const flag = this._resolveMovementKey(e.key);
     if (flag !== null) {
+      e.preventDefault();
       this._keyboard[flag] = false;
     }
   }
