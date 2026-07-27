@@ -19,6 +19,7 @@ const DEFAULT_LACUNARITY = 2;
 const SURFACE_NOISE_OFFSET = 101.137;
 const CAVE_NOISE_OFFSET_X = 397.271;
 const CAVE_NOISE_OFFSET_Y = 613.911;
+const MIN_TILE_INDEX = 0;
 
 /**
  * Procedural terrain generator backed by seeded 2D simplex noise.
@@ -82,7 +83,8 @@ export class WorldGenerator implements WorldGeneratorContract {
     const baseSurfaceHeight = Math.floor(this.config.height * this.config.surfaceLevel);
     const surfaceOffset = Math.round((normalizedSurfaceNoise - 0.5) * 2 * this.config.surfaceAmplitude);
 
-    return clamp(baseSurfaceHeight + surfaceOffset, 0, this.config.height - 1);
+    const maxSurfaceTileY = this.config.height - 1;
+    return clamp(baseSurfaceHeight + surfaceOffset, MIN_TILE_INDEX, maxSurfaceTileY);
   }
 
   private _getTileAt(worldX: number, worldY: number): TileType {

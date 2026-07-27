@@ -39,6 +39,8 @@ export class ChunkRenderer implements ChunkRendererContract {
 
     const minTileX = Math.max(0, Math.floor(viewportLeft / this.tileSize));
     const minTileY = Math.max(0, Math.floor(viewportTop / this.tileSize));
+    // Subtract 1 so the right/bottom edges stay inclusive when they land exactly
+    // on a tile boundary.
     const maxTileX = Math.min(world.width - 1, Math.floor((viewportRight - 1) / this.tileSize));
     const maxTileY = Math.min(world.height - 1, Math.floor((viewportBottom - 1) / this.tileSize));
 

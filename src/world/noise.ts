@@ -1,6 +1,7 @@
 const PERMUTATION_SIZE = 256;
 const SIMPLEX_SKEW_2D = 0.5 * (Math.sqrt(3) - 1);
 const SIMPLEX_UNSKEW_2D = (3 - Math.sqrt(3)) / 6;
+const SIMPLEX_SCALE_FACTOR = 70;
 
 const GRADIENTS_2D: ReadonlyArray<readonly [number, number]> = [
   [1, 1],
@@ -93,7 +94,7 @@ export class SimplexNoise {
     const n1 = contribution(this._gradient(gi1, x1, y1), x1, y1);
     const n2 = contribution(this._gradient(gi2, x2, y2), x2, y2);
 
-    return 70 * (n0 + n1 + n2);
+    return SIMPLEX_SCALE_FACTOR * (n0 + n1 + n2);
   }
 }
 
