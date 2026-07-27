@@ -71,8 +71,8 @@ export class CanvasManager {
     this._canvas.style.width = `${this._logicalWidth}px`;
     this._canvas.style.height = `${this._logicalHeight}px`;
 
-    // Scale the context so that all drawing operations use CSS pixel units.
-    this._ctx.scale(dpr, dpr);
+    // Reset and scale the context so that all drawing operations use CSS pixel units.
+    this._ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
   // ─── Public API ───────────────────────────────────────────────────────────
