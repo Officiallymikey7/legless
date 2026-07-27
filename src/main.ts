@@ -22,11 +22,7 @@ const SPAWN_TILES_ABOVE_SURFACE = 5;
  * Space/W to jump.
  */
 class WorldDemoGame extends Game {
-  private readonly _world = new World({
-    seed: DEMO_SEED,
-    width: WORLD_WIDTH_TILES,
-    height: WORLD_HEIGHT_TILES,
-  });
+  private readonly _world: World;
   private readonly _renderer = new ChunkRenderer(this.canvas, DEFAULT_TILE_SIZE);
 
   private readonly _player: Player;
@@ -39,6 +35,13 @@ class WorldDemoGame extends Game {
 
   constructor() {
     super({ canvasId: 'game-canvas', targetFps: 60 });
+
+    // Initialize the world first.
+    this._world = new World({
+      seed: DEMO_SEED,
+      width: WORLD_WIDTH_TILES,
+      height: WORLD_HEIGHT_TILES,
+    });
 
     // Spawn the player above the surface level at world centre.
     const spawnTileX = Math.floor(WORLD_WIDTH_TILES * 0.5);
