@@ -22,6 +22,7 @@ export class InputManager {
     down: false,
     left: false,
     right: false,
+    jump: false,
   };
 
   private _mouse: MouseState = {
@@ -80,6 +81,8 @@ export class InputManager {
       case 'D':
       case 'ArrowRight':
         return 'right';
+      case ' ':
+        return 'jump';
       default:
         return null;
     }

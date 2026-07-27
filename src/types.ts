@@ -34,6 +34,8 @@ export interface KeyboardState {
   left: boolean;
   /** True while the D key or ArrowRight key is held. */
   right: boolean;
+  /** True while the Space bar is held. */
+  jump: boolean;
 }
 
 /** Current state of the mouse. */
