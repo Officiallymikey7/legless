@@ -33,6 +33,9 @@ export class CanvasManager {
    */
   constructor(canvasId: string) {
     const el = document.getElementById(canvasId);
+    if (el === null) {
+      throw new Error(`CanvasManager: element #${canvasId} was not found in the DOM.`);
+    }
     if (!(el instanceof HTMLCanvasElement)) {
       throw new Error(`CanvasManager: element #${canvasId} is not a <canvas>.`);
     }
@@ -167,7 +170,8 @@ export class CanvasManager {
    * Renders a text string onto the canvas.
    *
    * @param text     - The string to draw.
-   * @param position - Top-left anchor of the text baseline in logical pixels.
+   * @param position - Anchor point in logical pixels: `x` is the left edge of
+   *   the text, `y` is the alphabetic baseline (not the top of the glyphs).
    * @param color    - CSS fill color. Defaults to white.
    * @param font     - CSS font string. Defaults to `'16px monospace'`.
    */

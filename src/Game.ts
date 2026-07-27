@@ -118,10 +118,10 @@ export class Game {
 
   /**
    * Starts the game loop.  Safe to call multiple times; subsequent calls while
-   * already running are no-ops.
+   * already running are no-ops.  Has no effect if the game has been stopped.
    */
   start(): void {
-    if (this._state === 'running') return;
+    if (this._state === 'running' || this._state === 'stopped') return;
     this._state = 'running';
     this._rafHandle = requestAnimationFrame((ts) => {
       this._lastTimestamp = ts;

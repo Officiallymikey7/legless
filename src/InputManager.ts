@@ -55,7 +55,7 @@ export class InputManager {
     window.addEventListener('keyup', this._onKeyUp);
     this._canvas.addEventListener('mousemove', this._onMouseMove);
     this._canvas.addEventListener('mousedown', this._onMouseDown);
-    this._canvas.addEventListener('mouseup', this._onMouseUp);
+    window.addEventListener('mouseup', this._onMouseUp);
     this._canvas.addEventListener('contextmenu', this._onContextMenu);
   }
 
@@ -151,7 +151,7 @@ export class InputManager {
     window.removeEventListener('keyup', this._onKeyUp);
     this._canvas.removeEventListener('mousemove', this._onMouseMove);
     this._canvas.removeEventListener('mousedown', this._onMouseDown);
-    this._canvas.removeEventListener('mouseup', this._onMouseUp);
+    window.removeEventListener('mouseup', this._onMouseUp);
     this._canvas.removeEventListener('contextmenu', this._onContextMenu);
   }
 }
