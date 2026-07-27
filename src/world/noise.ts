@@ -28,6 +28,10 @@ export class SimplexNoise {
    * @param seed - Deterministic seed for permutation generation.
    */
   constructor(seed: number) {
+    if (!Number.isInteger(seed) || seed < 0) {
+      throw new Error('SimplexNoise: seed must be a non-negative integer.');
+    }
+
     this._permutation = this._buildPermutation(seed);
   }
 

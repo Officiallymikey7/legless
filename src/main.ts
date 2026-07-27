@@ -57,13 +57,13 @@ class WorldDemoGame extends Game {
     this._camera.position.x += moveX * CAMERA_SPEED_PIXELS_PER_SECOND * dt;
     this._camera.position.y += moveY * CAMERA_SPEED_PIXELS_PER_SECOND * dt;
 
-    const halfViewportWidth = this.canvas.width * 0.5;
-    const halfViewportHeight = this.canvas.height * 0.5;
-    const maxCameraX = WORLD_WIDTH_TILES * DEFAULT_TILE_SIZE;
-    const maxCameraY = WORLD_HEIGHT_TILES * DEFAULT_TILE_SIZE;
+    const worldWidthPixels = WORLD_WIDTH_TILES * DEFAULT_TILE_SIZE;
+    const worldHeightPixels = WORLD_HEIGHT_TILES * DEFAULT_TILE_SIZE;
+    const [minCameraX, maxCameraX] = getCameraBounds(worldWidthPixels, this.canvas.width);
+    const [minCameraY, maxCameraY] = getCameraBounds(worldHeightPixels, this.canvas.height);
 
-    this._camera.position.x = clamp(this._camera.position.x, halfViewportWidth, maxCameraX - halfViewportWidth);
-    this._camera.position.y = clamp(this._camera.position.y, halfViewportHeight, maxCameraY - halfViewportHeight);
+    this._camera.position.x = clamp(this._camera.position.x, minCameraX, maxCameraX);
+    this._camera.position.y = clamp(this._camera.position.y, minCameraY, maxCameraY);
   }
 
   /**
@@ -85,4 +85,14 @@ game.start();
 
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
+}
+
+function getCameraBounds(worldSize: number, viewportSize: number): [number, number] {
+  if (viewportSize >= worldSize) {
+    const center = worldSize * 0.5;
+    return [center, center];
+  }
+
+  const halfViewport = viewportSize * 0.5;
+  return [halfViewport, worldSize - halfViewport];
 }

@@ -33,19 +33,7 @@ export class WorldGenerator implements WorldGeneratorContract {
    * @param config - World-generation settings.
    */
   constructor(config: WorldConfig) {
-    this.config = {
-      chunkSize: DEFAULT_CHUNK_SIZE,
-      surfaceWavelength: DEFAULT_SURFACE_WAVELENGTH,
-      surfaceAmplitude: DEFAULT_SURFACE_AMPLITUDE,
-      dirtDepth: DEFAULT_DIRT_DEPTH,
-      surfaceLevel: DEFAULT_SURFACE_LEVEL,
-      caveScale: DEFAULT_CAVE_SCALE,
-      caveThreshold: DEFAULT_CAVE_THRESHOLD,
-      octaves: DEFAULT_OCTAVES,
-      persistence: DEFAULT_PERSISTENCE,
-      lacunarity: DEFAULT_LACUNARITY,
-      ...config,
-    };
+    this.config = resolveConfig(config);
     this._noise = new SimplexNoise(this.config.seed);
   }
 
@@ -62,10 +50,6 @@ export class WorldGenerator implements WorldGeneratorContract {
       frequency *= this.config.lacunarity;
     }
 
-    if (amplitudeSum === 0) {
-      return 0;
-    }
-
     return total / amplitudeSum;
   }
 
@@ -80,11 +64,10 @@ export class WorldGenerator implements WorldGeneratorContract {
         SURFACE_NOISE_OFFSET,
       ),
     );
-    const baseSurfaceHeight = Math.floor(this.config.height * this.config.surfaceLevel);
+    const baseSurfaceY = Math.floor(this.config.height * this.config.surfaceLevel);
     const surfaceOffset = Math.round((normalizedSurfaceNoise - 0.5) * 2 * this.config.surfaceAmplitude);
-
     const maxSurfaceTileY = this.config.height - 1;
-    return clamp(baseSurfaceHeight + surfaceOffset, MIN_TILE_INDEX, maxSurfaceTileY);
+    return clamp(baseSurfaceY + surfaceOffset, MIN_TILE_INDEX, maxSurfaceTileY);
   }
 
   private _getTileAt(worldX: number, worldY: number): TileType {
@@ -147,6 +130,27 @@ export class WorldGenerator implements WorldGeneratorContract {
 
     return new Chunk(chunkX, chunkY, tiles, size);
   }
+}
+
+function resolveConfig(config: WorldConfig): Required<WorldConfig> {
+  const resolvedConfig: Required<WorldConfig> = {
+    chunkSize: DEFAULT_CHUNK_SIZE,
+    surfaceWavelength: DEFAULT_SURFACE_WAVELENGTH,
+    surfaceAmplitude: DEFAULT_SURFACE_AMPLITUDE,
+    dirtDepth: DEFAULT_DIRT_DEPTH,
+    surfaceLevel: DEFAULT_SURFACE_LEVEL,
+    caveScale: DEFAULT_CAVE_SCALE,
+    caveThreshold: DEFAULT_CAVE_THRESHOLD,
+    octaves: DEFAULT_OCTAVES,
+    persistence: DEFAULT_PERSISTENCE,
+    lacunarity: DEFAULT_LACUNARITY,
+    ...config,
+  };
+  if (!Number.isInteger(resolvedConfig.octaves) || resolvedConfig.octaves < 1) {
+    throw new Error('WorldGenerator: octaves must be a positive integer.');
+  }
+
+  return resolvedConfig;
 }
 
 function clamp(value: number, min: number, max: number): number {
