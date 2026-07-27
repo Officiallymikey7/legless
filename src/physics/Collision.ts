@@ -19,6 +19,20 @@ function isSolid(tile: TileType): boolean {
   return tile === TileType.Grass || tile === TileType.Dirt || tile === TileType.Stone;
 }
 
+/**
+ * Returns the tile-space coordinates of the centre of a player's AABB.
+ *
+ * @param player   - The player whose bounds are used.
+ * @param tileSize - Pixel size of one tile.
+ */
+function centerTile(player: Player, tileSize: number): { cx: number; cy: number } {
+  const bounds = player.getBounds();
+  return {
+    cx: Math.floor((bounds.x + bounds.width * 0.5) / tileSize),
+    cy: Math.floor((bounds.y + bounds.height * 0.5) / tileSize),
+  };
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
@@ -54,9 +68,7 @@ export function resolveCollisions(
   player.x += player.vx * dt;
 
   {
-    const bounds = player.getBounds();
-    const cx = Math.floor((bounds.x + bounds.width * 0.5) / tileSize);
-    const cy = Math.floor((bounds.y + bounds.height * 0.5) / tileSize);
+    const { cx, cy } = centerTile(player, tileSize);
 
     for (let dy = -1; dy <= 1; dy += 1) {
       for (let dx = -1; dx <= 1; dx += 1) {
@@ -95,9 +107,7 @@ export function resolveCollisions(
   player.y += player.vy * dt;
 
   {
-    const bounds = player.getBounds();
-    const cx = Math.floor((bounds.x + bounds.width * 0.5) / tileSize);
-    const cy = Math.floor((bounds.y + bounds.height * 0.5) / tileSize);
+    const { cx, cy } = centerTile(player, tileSize);
 
     for (let dy = -1; dy <= 1; dy += 1) {
       for (let dx = -1; dx <= 1; dx += 1) {
