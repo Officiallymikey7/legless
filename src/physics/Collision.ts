@@ -37,7 +37,7 @@ function centerTile(player: Player, tileSize: number): { cx: number; cy: number 
 
 /**
  * Resolves AABB collisions between a player and the tile grid in two separate
- * passes — one per axis — to prevent tunnelling and enable smooth wall sliding.
+ * passes — one per axis — to enable smooth wall sliding.
  *
  * **Axis order:**
  * 1. Move player along X by `vx * dt`, then resolve all X-axis tile overlaps.

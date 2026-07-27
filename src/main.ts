@@ -13,9 +13,6 @@ const OVERLAY_TEXT_COLOR = '#f8fafc';
 const OVERLAY_SHADOW_COLOR = '#111827';
 const SKY_COLOR = '#7dd3fc';
 
-/** Approximate surface height as a fraction of world height (must match WorldGenerator default). */
-const SURFACE_LEVEL_FRACTION = 0.35;
-
 /** Vertical offset above the surface (in tiles) where the player spawns. */
 const SPAWN_TILES_ABOVE_SURFACE = 5;
 
@@ -43,10 +40,10 @@ class WorldDemoGame extends Game {
   constructor() {
     super({ canvasId: 'game-canvas', targetFps: 60 });
 
-    // Spawn the player above the approximate surface level at world centre.
+    // Spawn the player above the surface level at world centre.
     const spawnTileX = Math.floor(WORLD_WIDTH_TILES * 0.5);
     const spawnTileY =
-      Math.floor(WORLD_HEIGHT_TILES * SURFACE_LEVEL_FRACTION) - SPAWN_TILES_ABOVE_SURFACE;
+      Math.floor(WORLD_HEIGHT_TILES * this._world.surfaceLevel) - SPAWN_TILES_ABOVE_SURFACE;
     this._player = new Player(
       spawnTileX * DEFAULT_TILE_SIZE,
       spawnTileY * DEFAULT_TILE_SIZE,

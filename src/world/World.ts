@@ -13,6 +13,7 @@ export class World implements WorldContract {
   readonly width: number;
   readonly height: number;
   readonly chunkSize: number;
+  readonly surfaceLevel: number;
 
   private readonly _generator: WorldGeneratorContract;
   private readonly _chunkCache = new Map<string, ChunkContract>();
@@ -26,6 +27,7 @@ export class World implements WorldContract {
     this.height = config.height;
     this._generator = generator ?? new WorldGenerator(config);
     this.chunkSize = this._generator.config.chunkSize;
+    this.surfaceLevel = this._generator.config.surfaceLevel;
   }
 
   private _chunkKey(chunkX: number, chunkY: number): string {
