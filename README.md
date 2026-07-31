@@ -1,9 +1,12 @@
 # Legless
 
-A production-ready **2D tile-based browser sandbox game engine** inspired by Terraria, built with TypeScript and HTML5 Canvas API. Zero external game engine dependencies—pure ES modules with Vite tooling.
+A production-ready **2D tile-based browser sandbox game engine** inspired by Terraria, built with TypeScript and HTML5 Canvas API. Designed around a **Fabric-oriented modular architecture**—lightweight, composable subsystems with zero external game engine dependencies. Pure ES modules with Vite tooling.
+
+> **Fabric-first design**: every subsystem (`Game`, `CanvasManager`, `InputManager`, `World`, `ChunkRenderer`) is a self-contained, independently replaceable module—mirroring the lightweight and composable philosophy of the [Fabric](https://fabricmc.net/) ecosystem.
 
 ## Features
 
+- 🧵 **Fabric-Oriented Architecture** – Lightweight, composable subsystems; swap or extend any layer without touching the rest
 - 🎮 **60 FPS Game Loop** – requestAnimationFrame-based with delta-time capping
 - ⌨️ **Input Management** – WASD + Arrow keys, mouse position tracking, left/right clicks
 - 🎨 **Canvas Subsystem** – Auto-resizing, HiDPI scaling, rendering utilities
@@ -49,9 +52,19 @@ Validates TypeScript without emitting output.
 legless/
 ├── src/
 │   ├── main.ts              – Entry point; instantiates your game
-│   ├── Game.ts              – Core game loop orchestrator
+│   ├── Game.ts              – Core game loop orchestrator (Fabric entrypoint equivalent)
 │   ├── CanvasManager.ts      – Canvas lifecycle & rendering utilities
 │   ├── InputManager.ts       – Keyboard & mouse state tracking
+│   ├── Player.ts            – Physics-driven player entity
+│   ├── physics/
+│   │   └── Collision.ts     – AABB tile collision resolution
+│   ├── world/
+│   │   ├── World.ts         – Chunked world storage and tile access
+│   │   ├── WorldGenerator.ts – Procedural terrain generation
+│   │   ├── Chunk.ts         – Fixed-size tile chunk
+│   │   ├── ChunkRenderer.ts  – Viewport-culled chunk renderer
+│   │   ├── noise.ts         – Seeded simplex noise
+│   │   └── types.ts         – World/camera type definitions
 │   └── types.ts             – Shared TypeScript interfaces
 ├── dist/                    – Built output (generated)
 ├── assets/                  – Game sprites, audio, fonts
@@ -61,11 +74,41 @@ legless/
 └── package.json             – Dependencies & scripts
 ```
 
+## Fabric Architecture
+
+This project follows a **Fabric-inspired modular design**: each subsystem is a lightweight, independently composable module with a single responsibility. There are no monolithic frameworks or hidden global state—every layer can be swapped, extended, or tested in isolation.
+
+| Module | Fabric Role |
+|--------|------------|
+| `Game.ts` | Mod initialiser / lifecycle entrypoint |
+| `CanvasManager.ts` | Rendering API mixin |
+| `InputManager.ts` | Input API mixin |
+| `World` + `WorldGenerator` | World-access layer |
+| `ChunkRenderer.ts` | Render pipeline hook |
+| `Player.ts` + `Collision.ts` | Entity/physics layer |
+
+Extending the engine works like writing a Fabric mod:
+
+```typescript
+// Subclass Game (like implementing ModInitializer) and override the hooks you need
+class MyGame extends Game {
+  protected override update(dt: number, input: InputSnapshot): void {
+    // your game logic here
+  }
+
+  protected override render(): void {
+    // your render logic here
+  }
+}
+
+new MyGame({ canvasId: 'game-canvas', targetFps: 60 }).start();
+```
+
 ## Architecture Overview
 
-### Game Engine (`Game.ts`)
+### Game Engine (`Game.ts`) — Mod Initialiser
 
-Main orchestrator managing the 60 FPS loop and lifecycle. Extend this class to implement your game:
+Main orchestrator managing the 60 FPS loop and lifecycle. This is the Fabric-style entrypoint: subclass `Game` and override the hooks you need, just like implementing `ModInitializer` in a Fabric mod:
 
 ```typescript
 class MyGame extends Game {
@@ -251,4 +294,5 @@ Contributions welcome! Please ensure:
 - TypeScript strict mode compliance
 - Clear JSDoc comments on public APIs
 - No external game engine dependencies
-- Modular, single-responsibility design
+- Modular, single-responsibility design (Fabric-style composability)
+- New subsystems must be independently testable and replaceable
